@@ -20,8 +20,10 @@ jobs:
         ./fury build run --output linear --project cid --module test -- io.ipfs.cid.CidTest
         ./fury build run --output linear --project multiaddr --module test -- io.ipfs.api.MultiAddressTest
     - name: Package logs
+      if: failure()
       run: find ~/.cache/fury -type f -name '*.log' | tar cvzf logs.tar.gz --files-from -
     - uses: actions/upload-artifact@v1.0.0
+      if: failure()
       with:
         name: logs-${{ runner.os }}
         path: logs.tar.gz
