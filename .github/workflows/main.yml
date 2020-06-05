@@ -35,12 +35,13 @@ jobs:
       timeout-minutes: 5
     - name: Run integration tests
       run: |
+        ./fury permission grant --project ipfs-http-client --module test --permission a46
         TESTS_FAILED=0
         ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.VersionsTest || TESTS_FAILED=1
         ./fury build run --output linear --project ipfs-http-client --module test --disable-security-manager -- io.ipfs.api.SimpleAddTest || TESTS_FAILED=1
-        ./fury build run --output linear --project ipfs-http-client --module test --disable-security-manager -- io.ipfs.api.RecursiveAddTest || TESTS_FAILED=1
-        ./fury build run --output linear --project ipfs-http-client --module test --disable-security-manager -- io.ipfs.api.AddTest || TESTS_FAILED=1
-        ./fury build run --output linear --project ipfs-http-client --module test --disable-security-manager -- io.ipfs.api.APITest || TESTS_FAILED=1
+        ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.RecursiveAddTest || TESTS_FAILED=1
+        ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.AddTest || TESTS_FAILED=1
+        ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.APITest || TESTS_FAILED=1
         test $TESTS_FAILED == 0
       timeout-minutes: 5
     - name: Package logs
