@@ -19,6 +19,28 @@ jobs:
         ./fury build run --output linear --project multihash --module test -- io.ipfs.multihash.MultihashTest
         ./fury build run --output linear --project cid --module test -- io.ipfs.cid.CidTest
         ./fury build run --output linear --project multiaddr --module test -- io.ipfs.api.MultiAddressTest
+    - name: Install IPFS
+      run: |
+        pushd /tmp
+        mkdir ipfs-installer
+        cd ipfs-installer
+        wget https://github.com/ipfs/go-ipfs/releases/download/v0.5.1/go-ipfs_v0.5.1_linux-amd64.tar.gz
+        tar -xvzf go-ipfs_v0.5.1_linux-amd64.tar.gz
+        cd go-ipfs
+        sudo bash install.sh
+        ipfs --version
+        ipfs init
+        ipfs daemon & sleep 5
+        popd
+      timeout-minutes: 5
+    - name: Run integration tests
+      run: |
+        ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.VersionsTest
+        ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.SimpleAddTest
+        ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.RecursiveAddTest
+        ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.AddTest
+        ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.APITest
+      timeout-minutes: 5
     - name: Package logs
       if: failure()
       run: find ~/.cache/fury -type f -name '*.log' | tar cvzf logs.tar.gz --files-from -
