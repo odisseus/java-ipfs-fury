@@ -29,7 +29,7 @@ jobs:
         cd go-ipfs
         sudo bash install.sh
         ipfs --version
-        ipfs init
+        #ipfs init
         ipfs daemon & sleep 5
         popd
       timeout-minutes: 5
