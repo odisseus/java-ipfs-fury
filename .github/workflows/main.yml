@@ -12,9 +12,16 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build the core module
       run: ./fury build run --output linear --project ipfs-http-client --module core
+      timeout-minutes: 5
     - name: Run the unit tests for dependencies
       run: |
         ./fury build run --output linear --project multibase --module test -- io.ipfs.multibase.MultibaseTest
         ./fury build run --output linear --project multihash --module test -- io.ipfs.multihash.MultihashTest
         ./fury build run --output linear --project cid --module test -- io.ipfs.cid.CidTest
         ./fury build run --output linear --project multiaddr --module test -- io.ipfs.api.MultiAddressTest
+    - name: Package logs
+      run: find ~/.cache/fury -type f -name '*.log' | tar cvzf logs.tar.gz --files-from -
+    - uses: actions/upload-artifact@v1.0.0
+      with:
+        name: logs-${{ runner.os }}
+        path: logs.tar.gz
