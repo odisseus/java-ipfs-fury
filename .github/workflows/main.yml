@@ -29,8 +29,6 @@ jobs:
         cd go-ipfs
         sudo bash install.sh
         ipfs --version
-        #ipfs init
-        #ipfs daemon & sleep 5
         popd
       timeout-minutes: 5
     - name: Run integration tests
@@ -38,7 +36,7 @@ jobs:
         ./fury permission grant --project ipfs-http-client --module test --permission a46
         TESTS_FAILED=0
         ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.VersionsTest || TESTS_FAILED=1
-        ./fury build run --output linear --project ipfs-http-client --module test --disable-security-manager -- io.ipfs.api.SimpleAddTest || TESTS_FAILED=1
+        #./fury build run --output linear --project ipfs-http-client --module test --disable-security-manager -- io.ipfs.api.SimpleAddTest || TESTS_FAILED=1
         ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.RecursiveAddTest || TESTS_FAILED=1
         ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.AddTest || TESTS_FAILED=1
         ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.APITest || TESTS_FAILED=1
