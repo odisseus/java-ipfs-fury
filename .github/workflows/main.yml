@@ -17,14 +17,18 @@ jobs:
       run: |
         ./fury build run --output linear --project multibase --module test -- io.ipfs.multibase.MultibaseTest
         ./fury build run --output linear --project multihash --module test -- io.ipfs.multihash.MultihashTest
-        ./fury build run --output linear --project cid --module test -- io.ipfs.cid.CidTest
+        ./fury build run --output linear --project cid       --module test -- io.ipfs.cid.CidTest
         ./fury build run --output linear --project multiaddr --module test -- io.ipfs.api.MultiAddressTest
-    - name: Prepare the fat JAR for testing
+    - name: Prepare the environment for integration tests
       run: |
         ./fury permission grant --project ipfs-http-client --module test --permission a46
         ./fury build save --output linear --project ipfs-http-client --module test --fat-jar --dir target
+        ./fury repo fork -r java-ipfs-http-client -f /tmp/java-ipfs-http-client
+        ./fury undo
+        ./fury repo list
+        cp target/ipfs-http-client-test.jar /tmp/java-ipfs-http-client
       timeout-minutes: 5
-    - name: Install IPFS
+    - name: Install fresh IPFS
       run: |
         pushd /tmp
         mkdir ipfs-installer
@@ -34,15 +38,11 @@ jobs:
         cd go-ipfs
         sudo bash install.sh
         popd
-      timeout-minutes: 5
-    - name: Prepare the environment for integration tests
-      run: |
-        ./fury repo fork -r java-ipfs-http-client -f /tmp/java-ipfs-http-client
-        cp target/ipfs-http-client-test.jar /tmp/java-ipfs-http-client
         pkill -f ipfs
         rm -rf ~/.ipfs
         ipfs init
-        ipfs daemon & sleep 5        
+        ipfs daemon & sleep 5  
+      timeout-minutes: 5
     - name: Run integration tests
       run: |        
         TESTS_FAILED=0
