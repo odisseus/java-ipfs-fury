@@ -20,7 +20,9 @@ jobs:
         ./fury build run --output linear --project cid --module test -- io.ipfs.cid.CidTest
         ./fury build run --output linear --project multiaddr --module test -- io.ipfs.api.MultiAddressTest
     - name: Prepare the fat JAR for testing
-      run: ./fury build save --output linear --project ipfs-http-client --module test --fat-jar --dir target
+      run: |
+        ./fury permission grant --project ipfs-http-client --module test --permission a46
+        ./fury build save --output linear --project ipfs-http-client --module test --fat-jar --dir target
     - name: Install IPFS
       run: |
         pushd /tmp
