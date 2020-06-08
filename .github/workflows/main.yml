@@ -26,6 +26,9 @@ jobs:
       timeout-minutes: 5
     - name: Install IPFS
       run: |
+        which ipfs
+        pgrep -a -f ipfs
+        ipfs shutdown
         pushd /tmp
         mkdir ipfs-installer
         cd ipfs-installer
@@ -34,6 +37,8 @@ jobs:
         cd go-ipfs
         sudo bash install.sh
         ipfs version
+        which ipfs
+        pgrep -a -f ipfs
         popd
       timeout-minutes: 5
     - name: Prepare the environment for integration tests
