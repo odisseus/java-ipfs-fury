@@ -41,7 +41,7 @@ jobs:
         pkill -f ipfs
         rm -rf ~/.ipfs
         ipfs init
-        ipfs daemon & sleep 5  
+        ipfs daemon --enable-pubsub-experiment --enable-namesys-pubsub & sleep 5  
       timeout-minutes: 5
     - name: Run integration tests
       run: |        
