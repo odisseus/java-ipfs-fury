@@ -36,14 +36,21 @@ jobs:
         ipfs version
         popd
       timeout-minutes: 5
-    - name: Run integration tests
+    - name: Prepare the environment for integration tests
       run: |
+        ./fury repo fork -r java-ipfs-http-client -f /tmp/java-ipfs-http-client
+        cp target/ipfs-http-client-test.jar /tmp/java-ipfs-http-client
+        ipfs daemon & sleep 5        
+    - name: Run integration tests
+      run: |        
         TESTS_FAILED=0
-        java -jar target/ipfs-http-client-test.jar io.ipfs.api.VersionsTest || TESTS_FAILED=1
-        java -jar target/ipfs-http-client-test.jar io.ipfs.api.SimpleAddTest || TESTS_FAILED=1
-        java -jar target/ipfs-http-client-test.jar io.ipfs.api.RecursiveAddTest || TESTS_FAILED=1
-        java -jar target/ipfs-http-client-test.jar io.ipfs.api.AddTest || TESTS_FAILED=1
-        java -jar target/ipfs-http-client-test.jar io.ipfs.api.APITest || TESTS_FAILED=1
+        pushd /tmp/java-ipfs-http-client
+        java -jar ipfs-http-client-test.jar io.ipfs.api.VersionsTest || TESTS_FAILED=1
+        java -jar ipfs-http-client-test.jar io.ipfs.api.SimpleAddTest || TESTS_FAILED=1
+        java -jar ipfs-http-client-test.jar io.ipfs.api.RecursiveAddTest || TESTS_FAILED=1
+        java -jar ipfs-http-client-test.jar io.ipfs.api.AddTest || TESTS_FAILED=1
+        java -jar ipfs-http-client-test.jar io.ipfs.api.APITest || TESTS_FAILED=1
+        popd
         test $TESTS_FAILED == 0
       timeout-minutes: 5
     - name: Package logs
