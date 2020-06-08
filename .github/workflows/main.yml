@@ -55,10 +55,15 @@ jobs:
         popd
         test $TESTS_FAILED == 0
       timeout-minutes: 5
+    - uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: test-env
+        path: /tmp/java-ipfs-http-client
     - name: Package logs
       if: always()
       run: find ~/.cache/fury -type f -name '*.log' | tar cvzf logs.tar.gz --files-from -
-    - uses: actions/upload-artifact@v1.0.0
+    - uses: actions/upload-artifact@v2
       if: always()
       with:
         name: logs-${{ runner.os }}
