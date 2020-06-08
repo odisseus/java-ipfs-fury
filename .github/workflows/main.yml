@@ -19,6 +19,8 @@ jobs:
         ./fury build run --output linear --project multihash --module test -- io.ipfs.multihash.MultihashTest
         ./fury build run --output linear --project cid --module test -- io.ipfs.cid.CidTest
         ./fury build run --output linear --project multiaddr --module test -- io.ipfs.api.MultiAddressTest
+    - name: Prepare the fat JAR for testing
+      run: ./fury build save --output linear --project ipfs-http-client --module test --fat-jar --dir target
     - name: Install IPFS
       run: |
         pushd /tmp
@@ -33,7 +35,8 @@ jobs:
       timeout-minutes: 5
     - name: Run integration tests
       run: |
-        ./fury permission grant --project ipfs-http-client --module test --permission a46
+        java -jar target/ipfs-http-client-test.jar io.ipfs.api.VersionsTest
+        echo foo
         TESTS_FAILED=0
         ./fury build run --output linear --project ipfs-http-client --module test -- io.ipfs.api.VersionsTest || TESTS_FAILED=1
         #./fury build run --output linear --project ipfs-http-client --module test --disable-security-manager -- io.ipfs.api.SimpleAddTest || TESTS_FAILED=1
