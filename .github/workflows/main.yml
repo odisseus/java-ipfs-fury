@@ -54,7 +54,7 @@ jobs:
         java -jar ipfs-http-client-test.jar io.ipfs.api.APITest || TESTS_FAILED=1
         popd
         test $TESTS_FAILED == 0
-      timeout-minutes: 5
+      timeout-minutes: 10
     - uses: actions/upload-artifact@v2
       if: failure()
       with:
