@@ -21,7 +21,6 @@ jobs:
         ./fury build run --output linear --project multiaddr --module test -- io.ipfs.api.MultiAddressTest
     - name: Prepare the environment for integration tests
       run: |
-        ./fury permission grant --project ipfs-http-client --module test --permission a46
         ./fury build save --output linear --project ipfs-http-client --module test --fat-jar --dir target
         ./fury repo fork -r java-ipfs-http-client -f /tmp/java-ipfs-http-client
         ./fury undo
