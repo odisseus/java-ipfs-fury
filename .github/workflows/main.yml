@@ -32,8 +32,8 @@ jobs:
         pushd /tmp
         mkdir ipfs-installer
         cd ipfs-installer
-        wget --quiet https://github.com/ipfs/go-ipfs/releases/download/v0.5.1/go-ipfs_v0.5.1_linux-amd64.tar.gz
-        tar -xvzf go-ipfs_v0.5.1_linux-amd64.tar.gz
+        wget --quiet https://github.com/ipfs/go-ipfs/releases/download/v0.6.0/go-ipfs_v0.6.0_linux-amd64.tar.gz
+        tar -xvzf go-ipfs_v0.6.0_linux-amd64.tar.gz
         cd go-ipfs
         sudo bash install.sh
         popd
