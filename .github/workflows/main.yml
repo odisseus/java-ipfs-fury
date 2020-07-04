@@ -21,7 +21,6 @@ jobs:
         ./fury build run --output linear --project multiaddr --module test -- io.ipfs.api.MultiAddressTest
     - name: Prepare the environment for integration tests
       run: |
-        ./fury permission grant --project ipfs-http-client --module test --permission a46
         ./fury build save --output linear --project ipfs-http-client --module test --fat-jar --dir target
         ./fury repo fork -r java-ipfs-http-client -f /tmp/java-ipfs-http-client
         ./fury undo
@@ -33,8 +32,8 @@ jobs:
         pushd /tmp
         mkdir ipfs-installer
         cd ipfs-installer
-        wget --quiet https://github.com/ipfs/go-ipfs/releases/download/v0.5.1/go-ipfs_v0.5.1_linux-amd64.tar.gz
-        tar -xvzf go-ipfs_v0.5.1_linux-amd64.tar.gz
+        wget --quiet https://github.com/ipfs/go-ipfs/releases/download/v0.6.0/go-ipfs_v0.6.0_linux-amd64.tar.gz
+        tar -xvzf go-ipfs_v0.6.0_linux-amd64.tar.gz
         cd go-ipfs
         sudo bash install.sh
         popd
